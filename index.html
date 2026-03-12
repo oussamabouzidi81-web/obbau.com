@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bureau d'Architecture et d’Urbanisme – Oussama Bouzidi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500&family=Tajawal:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fcfcfc;
+            --grid-color: rgba(0, 0, 0, 0.035);
+            --line-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            overflow-x: hidden;
+            color: #1a1a1a;
+        }
+
+        /* Architectural Grid Background */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Structural Design Lines */
+        .struct-line-v {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: var(--line-color);
+            z-index: 1;
+        }
+
+        .struct-line-h {
+            position: fixed;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--line-color);
+            z-index: 1;
+        }
+
+        /* Transitions */
+        .fade-content {
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .hidden-content {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        /* RTL Handling for Arabic */
+        [dir="rtl"] {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* Logo Inversion Strategy */
+        .logo-img {
+            filter: invert(1) grayscale(100%) contrast(1.1) brightness(0.95);
+            mix-blend-mode: multiply;
+        }
+
+        .lang-btn.active {
+            color: #000;
+            font-weight: 500;
+        }
+
+        .lang-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #000;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="grid-overlay"></div>
+    
+    <!-- Structural Frame (Desktop only) -->
+    <div class="struct-line-v hidden md:block" style="left: 10%;"></div>
+    <div class="struct-line-v hidden md:block" style="right: 10%;"></div>
+    <div class="struct-line-h hidden md:block" style="top: 15%;"></div>
+    <div class="struct-line-h hidden md:block" style="bottom: 15%;"></div>
+
+    <div class="relative z-10 min-h-screen flex flex-col max-w-7xl mx-auto px-6 md:px-12">
+        <!-- Header -->
+        <header class="py-10 flex justify-between items-center">
+            <div id="office-label" class="hidden md:block text-[10px] uppercase tracking-[0.4em] text-gray-400 font-light">
+                Studio d'Architecture
+            </div>
+            
+            <!-- Fixed Nav Order: FR | AR | EN -->
+            <nav class="flex gap-8 items-center" dir="ltr">
+                <button onclick="setLanguage('FR')" id="btn-FR" class="lang-btn relative text-xs tracking-widest text-gray-400 hover:text-gray-900 transition-colors uppercase">FR</button>
+                <button onclick="setLanguage('AR')" id="btn-AR" class="lang-btn relative text-xs tracking-widest text-gray-400 hover:text-gray-900 transition-colors uppercase">AR</button>
+                <button onclick="setLanguage('EN')" id="btn-EN" class="lang-btn relative text-xs tracking-widest text-gray-400 hover:text-gray-900 transition-colors uppercase">EN</button>
+            </nav>
+        </header>
+
+        <!-- Main Section -->
+        <main id="main-content" class="flex-grow flex flex-col items-center justify-center text-center fade-content">
+            <!-- Logo Container -->
+            <div class="mb-12 relative">
+                <div class="absolute inset-0 bg-white/40 blur-3xl rounded-full z-0"></div>
+                <img src="logo.png" alt="Oussama Bouzidi Architecture" class="logo-img h-32 md:h-48 lg:h-56 object-contain relative z-10 transition-transform duration-700 hover:scale-105">
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-8 max-w-3xl">
+                <div class="space-y-3">
+                    <h2 id="hero-subtitle" class="text-xs md:text-sm tracking-[0.3em] uppercase text-gray-400 font-light"></h2>
+                    <h1 id="hero-title" class="text-3xl md:text-6xl font-light text-gray-900 tracking-tight leading-tight"></h1>
+                </div>
+
+                <div class="w-16 h-px bg-gray-300 mx-auto"></div>
+
+                <p id="hero-message" class="text-lg md:text-xl text-gray-500 font-light max-w-xl mx-auto leading-relaxed"></p>
+
+                <div class="pt-10">
+                    <p id="contact-label" class="text-xs uppercase tracking-widest text-gray-400 font-light mb-4">Contact</p>
+                    <p id="contact-prefix" class="text-sm text-gray-500 mb-2"></p>
+                    <a href="tel:+212661759059" class="inline-block text-xl md:text-2xl font-light text-gray-900 border-b border-gray-200 hover:border-gray-900 transition-all duration-300 pb-1" style="direction: ltr;">
+                        +212 661 75 90 59
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="py-12 text-center fade-content">
+            <p id="footer-text" class="text-[10px] md:text-xs text-gray-400 font-light tracking-[0.2em] uppercase"></p>
+        </footer>
+    </div>
+
+    <script>
+        const content = {
+            FR: {
+                subtitle: "Bureau d'Architecture et d’Urbanisme",
+                title: "Oussama Bouzidi",
+                message: "Notre site web est actuellement en cours de développement.",
+                contactPrefix: "Pour toute demande de services d'architecture ou de projet, veuillez nous contacter :",
+                footer: "© Bureau d'Architecture et d’Urbanisme Oussama Bouzidi",
+                officeLabel: "Studio d'Architecture",
+                dir: "ltr"
+            },
+            EN: {
+                subtitle: "Architecture and Urban Planning Office",
+                title: "Oussama Bouzidi",
+                message: "Our website is currently under development.",
+                contactPrefix: "For architecture services or project inquiries, please contact:",
+                footer: "© Architecture and Urban Planning Office Oussama Bouzidi",
+                officeLabel: "Architecture Studio",
+                dir: "ltr"
+            },
+            AR: {
+                subtitle: "مكتب الهندسة المعمارية والتعمير",
+                title: "أسامة بوزيدي",
+                message: "موقعنا الإلكتروني قيد التطوير حالياً.",
+                contactPrefix: "لأي استفسار أو طلب خدمات معمارية، يرجى التواصل معنا:",
+                footer: "© مكتب الهندسة المعمارية والتعمير أسامة بوزيدي",
+                officeLabel: "استوديو الهندسة المعمارية",
+                dir: "rtl"
+            }
+        };
+
+        function setLanguage(lang) {
+            const main = document.getElementById('main-content');
+            const footer = document.querySelector('footer');
+            
+            // Fade out
+            main.classList.add('hidden-content');
+            footer.classList.add('hidden-content');
+
+            setTimeout(() => {
+                const data = content[lang];
+                document.body.setAttribute('dir', data.dir);
+                
+                document.getElementById('hero-subtitle').innerText = data.subtitle;
+                document.getElementById('hero-title').innerText = data.title;
+                document.getElementById('hero-message').innerText = data.message;
+                document.getElementById('contact-prefix').innerText = data.contactPrefix;
+                document.getElementById('footer-text').innerText = data.footer;
+                document.getElementById('office-label').innerText = data.officeLabel;
+
+                // Update active button state
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(`btn-${lang}`).classList.add('active');
+
+                // Fade in
+                main.classList.remove('hidden-content');
+                footer.classList.remove('hidden-content');
+            }, 300);
+        }
+
+        // Initialize with French
+        window.onload = () => {
+            setLanguage('FR');
+        };
+    </script>
+</body>
+</html>
+
